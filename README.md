@@ -65,10 +65,10 @@ User: Can search and filter books by title, genre, and author.
 Public: Can only view available books.
 🚨 API Endpoints
 Method	Endpoint	Description	Auth Required
-POST	/api/auth/register	Register new user	
-POST	/api/auth/login	Login user	
-GET	/api/book	Get all books	✅
-POST	/api/book/add	Add new book	✅ (Admin)
+### POST	/api/auth/register	Register new user	
+- POST	/api/auth/login	Login user	
+- GET	/api/book	Get all books	✅
+- POST	/api/book/add	Add new book	✅ (Admin)
 
 frontend deployed link -
 🏆 Admin Credentials
