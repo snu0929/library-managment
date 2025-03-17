@@ -24,7 +24,7 @@ const Register = () => {
         e.preventDefault();
 
         try {
-            const res = await axios.post("http://localhost:5000/api/auth/register", userData);
+            const res = await axios.post("https://library-managment-h5u0.onrender.com/api/auth/register", userData);
             console.log(res.data);
             alert("Registration successful!");
             navigate("/login");

@@ -12,7 +12,7 @@ const BookDetails = () => {
         const fetchBook = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const res = await axios.get(`http://localhost:5000/api/book/${id}`, {
+                const res = await axios.get(`https://library-managment-h5u0.onrender.com/api/book/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
