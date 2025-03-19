@@ -248,7 +248,7 @@ const Dashboard = () => {
                             <BookCard key={book._id} onClick={() => handleBookClick(book._id)}>
                                 <ImageWrapper>
                                     {book.coverImage ? (
-                                        <CoverImage src={`http://localhost:5000/${book.coverImage}`} alt={book.title} />
+                                        <CoverImage src={`https://library-managment-h5u0.onrender.com/${book.coverImage}`} alt={book.title} />
                                     ) : (
                                         <DefaultCover>
                                             <FaBook size={40} />
