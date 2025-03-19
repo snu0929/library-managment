@@ -76,7 +76,7 @@ const BookDetails = () => {
             <BackButton onClick={() => navigate("/dashboard")}>⬅ Back to Dashboard</BackButton>
 
             <BookContainer>
-                <CoverImage src={`https://library-managment-h5u0.onrender.com/${book.coverImage}`} alt={book.title} />
+                <CoverImage src={`https://library-managment-h5u0.onrender.com/api/book/${book.coverImage}`} alt={book.title} />
                 <Content>
                     <Title>{book.title}</Title>
                     <Author>by {book.author}</Author>
