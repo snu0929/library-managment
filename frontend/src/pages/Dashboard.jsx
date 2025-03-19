@@ -33,7 +33,7 @@ const Dashboard = () => {
             try {
                 const token = localStorage.getItem("token");
 
-                const res = await axios.get("http://localhost:5000/api/book", {
+                const res = await axios.get("https://library-managment-h5u0.onrender.com/api/book", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

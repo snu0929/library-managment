@@ -14,7 +14,7 @@ const BookDetails = () => {
         const fetchBook = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const res = await axios.get(`http://localhost:5000/api/book/${id}`, {
+                const res = await axios.get(`https://library-managment-h5u0.onrender.com/api/book/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -31,7 +31,7 @@ const BookDetails = () => {
         const fetchRelatedBooks = async (genre) => {
             try {
                 const token = localStorage.getItem("token");
-                const res = await axios.get(`http://localhost:5000/api/book?genre=${genre}`, {
+                const res = await axios.get(`https://library-managment-h5u0.onrender.com/api/book?genre=${genre}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -95,7 +95,7 @@ const BookDetails = () => {
                 <RelatedBooksList>
                     {relatedBooks.map((book) => (
                         <RelatedBookCard key={book._id} onClick={() => navigate(`/book/${book._id}`)}>
-                            <RelatedBookImage src={`http://localhost:5000/${book.coverImage}`} alt={book.title} />
+                            <RelatedBookImage src={`https://library-managment-h5u0.onrender.com/${book.coverImage}`} alt={book.title} />
                             <RelatedBookTitle>{book.title}</RelatedBookTitle>
                             <RelatedBookAuthor>by {book.author}</RelatedBookAuthor>
                         </RelatedBookCard>
