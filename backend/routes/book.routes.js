@@ -2,8 +2,20 @@ const express = require("express");
 const { BookModel } = require("../models/book.model");
 const { auth } = require("../middleare/auth.middleware");
 const BookRouter = express.Router();
+const multer = require("multer");
 
-BookRouter.post("/add", auth, async (req, res) => {
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage });
+
+BookRouter.post("/add", auth, upload.single("coverImage"), async (req, res) => {
   const { title, author, genre, year, description } = req.body;
 
   if (req.user.role !== "admin") {
@@ -15,7 +27,15 @@ BookRouter.post("/add", auth, async (req, res) => {
   }
 
   try {
-    const book = new BookModel({ title, author, genre, year, description });
+    const coverImage = req.file ? req.file.path : "";
+    const book = new BookModel({
+      title,
+      author,
+      genre,
+      year,
+      description,
+      coverImage,
+    });
     await book.save();
     res.status(201).json({ msg: "New book added successfully", book });
   } catch (error) {
@@ -57,6 +77,29 @@ BookRouter.get("/:id", async (req, res) => {
     res
       .status(500)
       .json({ msg: "Failed to fetch book details", error: error.message });
+  }
+});
+
+BookRouter.delete("/delete/:id", auth, async (req, res) => {
+  const { id } = req.params;
+
+  if (req.user.role !== "admin") {
+    return res.status(403).json({ msg: "Only admins can delete books" });
+  }
+
+  try {
+    const deletedBook = await BookModel.findByIdAndDelete(id);
+
+    if (!deletedBook) {
+      return res.status(404).json({ msg: "Book not found" });
+    }
+
+    res.status(200).json({ msg: "Book deleted successfully", deletedBook });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ msg: "Failed to delete the book", error: error.message });
   }
 });
 

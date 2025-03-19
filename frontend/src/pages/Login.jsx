@@ -6,39 +6,49 @@ import styled from "styled-components";
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        setError("");
 
         try {
             const res = await axios.post("https://library-managment-h5u0.onrender.com/api/auth/login", {
+                // https://library-managment-h5u0.onrender.com
                 email,
                 password,
             });
-            console.log(res.data);
+
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("role", res.data.user.role);
-
-            alert("Login successful!");
+            localStorage.setItem("username", res.data.user.username);
             navigate("/dashboard");
+
         } catch (error) {
-            alert(error.response?.data?.msg || "Login failed");
+            setError(error.response?.data?.msg || "Login failed. Please try again.");
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <Container>
             <FormWrapper>
-                <Title>Login</Title>
+                <Title>Welcome Back</Title>
+                <Subtitle>Sign in to continue to your account</Subtitle>
+
                 <Form onSubmit={handleLogin}>
                     <Input
                         type="email"
-                        placeholder="Email"
+                        placeholder="Email address"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
+
                     <Input
                         type="password"
                         placeholder="Password"
@@ -46,11 +56,18 @@ const Login = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                    <Button type="submit">Login</Button>
+
+                    {error && <ErrorMessage>{error}</ErrorMessage>}
+
+                    <Button disabled={loading}>
+                        {loading ? "Logging in..." : "Sign In"}
+                    </Button>
                 </Form>
-                <Text>
-                    Don't have an account? <Link onClick={() => navigate("/register")}>Register here</Link>
-                </Text>
+
+                <FooterText>
+                    Don't have an account?{" "}
+                    <Link onClick={() => navigate("/register")}>Sign up</Link>
+                </FooterText>
             </FormWrapper>
         </Container>
     );
@@ -63,39 +80,48 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #f4f4f9;
+    min-height: 70vh;
+    background-image: url("https://images.unsplash.com/photo-1497633762265-9d179a990aa6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1952&q=80");
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
 `;
 
 const FormWrapper = styled.div`
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
+    text-align: center;
 `;
 
 const Title = styled.h2`
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #4a90e2;
-    text-align: center;
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+`;
+
+const Subtitle = styled.p`
+    color: #666;
+    margin-bottom: 2rem;
 `;
 
 const Form = styled.form`
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 1rem;
 `;
 
 const Input = styled.input`
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
     outline: none;
-    transition: border 0.2s ease;
+    transition: border-color 0.2s ease;
 
     &:focus {
         border-color: #4a90e2;
@@ -103,30 +129,46 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-    background-color: #4a90e2;
-    color: #ffffff;
-    padding: 12px;
+    background: #4a90e2;
+    color: white;
+    padding: 0.75rem;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
-    font-size: 16px;
-    transition: background 0.3s;
+    transition: background 0.2s ease;
 
     &:hover {
-        background-color: #357abd;
+        background: #357abd;
+    }
+
+    &:disabled {
+        background: #a0c4ff;
+        cursor: not-allowed;
     }
 `;
 
-const Text = styled.p`
-    margin-top: 12px;
-    text-align: center;
-    color: #333;
+const ErrorMessage = styled.div`
+    color: #e74c3c;
+    background: #f8d7da;
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+`;
+
+const FooterText = styled.p`
+    color: #666;
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
 `;
 
 const Link = styled.span`
     color: #4a90e2;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 500;
+
     &:hover {
         text-decoration: underline;
     }

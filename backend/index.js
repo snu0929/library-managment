@@ -12,6 +12,7 @@ app.use(cors());
 // app.get("/check/auth", auth, async (req, res) => {
 //   res.status(200).json("<h1>welcome to library management app</h1>");
 // });
+app.use("/uploads", express.static("uploads"));
 
 app.use("/api/auth", UserRouter);
 app.use("/api/book", BookRouter);

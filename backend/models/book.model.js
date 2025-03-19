@@ -21,6 +21,10 @@ const bookSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  coverImage: {
+    type: String,
+    default: "",
+  },
 });
 
 const BookModel = mongoose.model("Book", bookSchema);
